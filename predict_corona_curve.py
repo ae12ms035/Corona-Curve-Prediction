@@ -153,7 +153,8 @@ def optimum_day_range(cumulativeCases):
         print(f"Curve started going up {opt_DayRange} days ago")
         return opt_DayRange
 
-predict_corona_curve(data, 'None', logistic_function, diff = 100, hm =  1)
+#Example: Predicting the corona curve for Germany    
+predict_corona_curve(data, 'Germany', logistic_function, diff = 100, hm =  1)
         
     
         
