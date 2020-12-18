@@ -33,7 +33,7 @@ def plateau(x, y, params, function, diff):
         confirmed_then = function(now + days-1, *params) 
         confirmed_now = function(now + days, *params) 
         casePerDay = confirmed_now - confirmed_then
-    return days, confirmed_now
+    return days
 
 def lin_interp(x, y, i, half):
     return x[i] + (x[i+1] - x[i]) * ((half - y[i]) / (y[i+1] - y[i]))
@@ -57,7 +57,7 @@ def predict_corona_curve(data, country, function, diff,hm):
     #       diff - threshold on cases per day, to estimate the flatterning time scale
     #       hm - whether FWHM to be calculated (boolean)
     #Output: Predicted curve, peak, time to flatten, half max, etc
-    if country != 'None' :
+    if country != 'Kerala' :
         countries = data[:,1]
         idxCountry = np.int32(np.where(countries == country))
         print(country)
@@ -124,11 +124,11 @@ def predict_corona_curve(data, country, function, diff,hm):
     plt.show()
     
 
-    days, confirmed = plateau(
+    days = plateau(
         x, y, params, logistic_function, diff=diff
     )
     print(f"{days} days until cases per day is less than {diff}")
-    print(f"Number of cases will be {int(confirmed)}")
+    print(f"Number of cases will be {int(function(days, *params))}")
 
 
 def optimum_day_range(cumulativeCases):
@@ -152,15 +152,5 @@ def optimum_day_range(cumulativeCases):
         opt_DayRange =  int(slopes[slopes[:,2] == np.amin(slopes[:,2]),1])#slowest growth period
         print(f"Curve started going up {opt_DayRange} days ago")
         return opt_DayRange
-
-#Example: Predicting the corona curve for Germany    
-predict_corona_curve(data, 'Germany', logistic_function, diff = 100, hm =  1)
-        
-    
-        
-
-
-
-
-
-
+#Example: Corona curve prediction for Germany
+predict_corona_curve(data, 'Germany', logistic_function, diff = 500, hm =  1)
